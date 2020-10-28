@@ -2,6 +2,7 @@ const express = require('express');
 const router = express.Router();
 const { check, validationResult } = require('express-validator');
 const Films = require('../../models/films');
+const sortFilms = require('../../utils/sortFilms');
 
 /**
  * Route 'api/films'
@@ -55,7 +56,8 @@ router.put(
 router.get('/', async (req, res) => {
   try {
     const films = await Films.find();
-    res.json(films);
+    const sortedFilms = films.sort(sortFilms);
+    res.json(sortedFilms);
   } catch (err) {
     console.error(err);
     res.status(500).send('Server error');
@@ -126,7 +128,9 @@ router.post('/', async (req, res) => {
     }
     const films = await Films.find(query);
 
-    res.json(films);
+    const sortedFilms = films.sort(sortFilms);
+
+    res.json(sortedFilms);
   } catch (err) {
     console.error(err);
     res.status(500).send('Server error');
